@@ -4,13 +4,109 @@ A new Flutter application.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-A few resources to get you started if this is your first Flutter project:
+void main() => runApp(MyApp());
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: TextFieldAndCheckPage(),
+    );
+  }
+}
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+class TextFieldAndCheckPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => TextFieldAndCheckPageState();
+}
+
+class TextFieldAndCheckPageState extends State<TextFieldAndCheckPage> {
+  //手机号的控制器
+  TextEditingController phoneController = TextEditingController();
+
+  //密码的控制器
+  TextEditingController passController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('登录'),
+      ),
+      body: Column(
+        children: <Widget>[
+          TextField(
+            controller: phoneController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(10.0),
+              icon: Icon(Icons.phone),
+              labelText: '请输入你的用户名)',
+              helperText: '请输入注册的手机号',
+            ),
+            autofocus: false,
+          ),
+          TextField(
+              controller: passController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10.0),
+                icon: Icon(Icons.lock),
+                labelText: '请输入密码)',
+              ),
+              obscureText: true),
+          RaisedButton(
+            onPressed: _login,
+            child: Text('登录'),
+          ),
+          RaisedButton(
+            onPressed: onTextClear,
+            child: Text('清除'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _login() {
+    print({'phone': phoneController.text, 'password': passController.text});
+    if (phoneController.text.length != 11) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('手机号码格式不对'),
+          ));
+    } else if (passController.text.length == 0) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('请填写密码'),
+          ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('登录成功'),
+          ));
+      phoneController.clear();
+    }
+  }
+
+  void onTextClear() {
+    setState(() {
+      phoneController.clear();
+      passController.clear();
+    });
+  }
+}
+
+```
